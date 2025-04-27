@@ -2,150 +2,179 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Load and GCash Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load & Trade Hub</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
-        .navbar { background: #ff5722; padding: 15px; color: white; text-align: center; font-size: 24px; }
-        .container { padding: 20px; }
-        .hidden { display: none; }
-        .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 400px; margin: 50px auto; }
-        input[type="text"], input[type="password"], button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
-        button { background-color: #ff5722; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #e64a19; }
-        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .product-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
-        .product-card h3 { margin: 10px 0 5px; font-size: 18px; }
-        .product-card p { margin: 5px 0; color: #555; }
-        .product-card button { margin-top: 10px; background-color: #4CAF50; }
-        .product-card button:hover { background-color: #45a049; }
-        .logout-btn { background: #d32f2f; margin-top: 20px; }
-        .logout-btn:hover { background: #b71c1c; }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f0f8ff;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        .form-container {
+            max-width: 400px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 16px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .section {
+            padding: 20px;
+            background: white;
+            margin: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+        }
+        .section-icon {
+            font-size: 2em;
+            margin-right: 15px;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+        }
+        nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #007bff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+        }
+        .logout {
+            margin-top: 20px;
+            background: #dc3545;
+        }
     </style>
 </head>
 <body>
 
-<div class="navbar">Load & GCash Marketplace</div>
+<header>Load & Trade Hub</header>
 
-<!-- SIGN UP PAGE -->
-<div class="form-container" id="signupPage">
-    <h2>Sign Up</h2>
-    <input type="text" id="signupUsername" placeholder="Username" required>
-    <input type="password" id="signupPassword" placeholder="Password" required>
-    <button onclick="signUp()">Create Account</button>
-    <p>Already have an account? <a href="#" onclick="showLogin()">Log in here</a></p>
+<div id="auth-container" class="form-container">
+    <h2 id="auth-title">Sign Up</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="signup()">Sign Up</button>
+    <p style="text-align:center; margin-top:10px;">Already have an account? <a href="#" onclick="switchToLogin()">Login</a></p>
 </div>
 
-<!-- LOGIN PAGE -->
-<div class="form-container hidden" id="loginPage">
-    <h2>Log In</h2>
-    <input type="text" id="loginUsername" placeholder="Username" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
-    <button onclick="logIn()">Log In</button>
-    <p>Don't have an account? <a href="#" onclick="showSignUp()">Sign up here</a></p>
-</div>
-
-<!-- MAIN PAGE -->
-<div class="container hidden" id="mainPage">
-    <h2>Available Services</h2>
-    <div class="products">
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200x150?text=Buy+Load" alt="Buy Load">
-            <h3>Buy Load</h3>
-            <p>Buy prepaid load for all networks from verified sellers.</p>
-            <button onclick="alert('Viewing Load Offers')">Browse</button>
-        </div>
-
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200x150?text=Buy+Data" alt="Buy Data">
-            <h3>Buy Mobile Data</h3>
-            <p>Affordable MB/GB data offers from trusted users.</p>
-            <button onclick="alert('Viewing Data Offers')">Browse</button>
-        </div>
-
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200x150?text=GCash+to+Load" alt="GCash to Load">
-            <h3>Trade GCash to Load</h3>
-            <p>Pay via GCash and receive prepaid load instantly.</p>
-            <button onclick="alert('Viewing GCash to Load Deals')">Trade</button>
-        </div>
-
-        <div class="product-card">
-            <img src="https://via.placeholder.com/200x150?text=Load+to+GCash" alt="Load to GCash">
-            <h3>Trade Load to GCash</h3>
-            <p>Sell your load and get GCash in return through offers.</p>
-            <button onclick="alert('Viewing Load to GCash Deals')">Trade</button>
-        </div>
+<div id="main-app" style="display:none; padding-bottom:60px;">
+    <div class="section" onclick="browse('load')">
+        <div class="section-icon">📱</div>
+        <div class="section-title">Buy Load</div>
     </div>
-    <button class="logout-btn" onclick="logout()">Log Out</button>
+    <div class="section" onclick="browse('mb')">
+        <div class="section-icon">🌐</div>
+        <div class="section-title">Buy MB/GB Data</div>
+    </div>
+    <div class="section" onclick="browse('trade-load')">
+        <div class="section-icon">🔄</div>
+        <div class="section-title">Trade Load to GCash</div>
+    </div>
+    <div class="section" onclick="browse('trade-gcash')">
+        <div class="section-icon">💸</div>
+        <div class="section-title">Trade GCash to Load</div>
+    </div>
+    <button class="logout" onclick="logout()">Logout</button>
 </div>
+
+<nav>
+    <a href="#" onclick="goHome()">Home</a>
+    <a href="#" onclick="browse('shop')">Shop</a>
+    <a href="#" onclick="browse('profile')">Profile</a>
+</nav>
 
 <script>
-function showLogin() {
-    document.getElementById("signupPage").classList.add("hidden");
-    document.getElementById("loginPage").classList.remove("hidden");
-}
-
-function showSignUp() {
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("signupPage").classList.remove("hidden");
-}
-
-function signUp() {
-    var username = document.getElementById("signupUsername").value.trim();
-    var password = document.getElementById("signupPassword").value.trim();
-
-    if (username === "" || password === "") {
-        alert("Please complete the form.");
-        return;
+    if(localStorage.getItem('loggedIn') === 'true') {
+        showMain();
     }
 
-    var accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
-
-    // Check if user already exists
-    if (accounts.find(acc => acc.username === username)) {
-        alert("Username already exists. Please log in.");
-        return;
+    function signup() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if(user && pass) {
+            localStorage.setItem('user', user);
+            localStorage.setItem('pass', pass);
+            localStorage.setItem('loggedIn', 'true');
+            showMain();
+        } else {
+            alert("Please fill in all fields.");
+        }
     }
 
-    accounts.push({ username: username, password: password });
-    localStorage.setItem("accounts", JSON.stringify(accounts));
-
-    alert("Account created successfully! Please log in.");
-    showLogin();
-}
-
-function logIn() {
-    var username = document.getElementById("loginUsername").value.trim();
-    var password = document.getElementById("loginPassword").value.trim();
-
-    var accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
-
-    var user = accounts.find(acc => acc.username === username && acc.password === password);
-
-    if (user) {
-        localStorage.setItem("loggedInUser", username);
-        showMainPage();
-    } else {
-        alert("Invalid username or password.");
+    function switchToLogin() {
+        document.getElementById('auth-title').innerText = 'Login';
+        document.querySelector('button').innerText = 'Login';
+        document.querySelector('button').setAttribute('onclick', 'login()');
     }
-}
 
-function logout() {
-    localStorage.removeItem("loggedInUser");
-    location.reload();
-}
+    function login() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if(user === localStorage.getItem('user') && pass === localStorage.getItem('pass')) {
+            localStorage.setItem('loggedIn', 'true');
+            showMain();
+        } else {
+            alert("Wrong credentials.");
+        }
+    }
 
-function showMainPage() {
-    document.getElementById("signupPage").classList.add("hidden");
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("mainPage").classList.remove("hidden");
-}
+    function logout() {
+        localStorage.setItem('loggedIn', 'false');
+        location.reload();
+    }
 
-// Auto login if already logged in
-if (localStorage.getItem("loggedInUser")) {
-    showMainPage();
-}
+    function showMain() {
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+    }
+
+    function browse(section) {
+        alert("Opening: " + section.toUpperCase());
+        // Later you can replace this alert with real browsing page system
+    }
+
+    function goHome() {
+        alert("You are at Home!");
+    }
 </script>
 
 </body>
