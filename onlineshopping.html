@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Load and GCash Marketplace</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+        .navbar { background: #ff5722; padding: 15px; color: white; text-align: center; font-size: 24px; }
+        .container { padding: 20px; }
+        .hidden { display: none; }
+        .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); max-width: 400px; margin: 50px auto; }
+        input[type="text"], input[type="password"], button { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #ff5722; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #e64a19; }
+        .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .product-card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+        .product-card img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; }
+        .product-card h3 { margin: 10px 0 5px; font-size: 18px; }
+        .product-card p { margin: 5px 0; color: #555; }
+        .product-card button { margin-top: 10px; background-color: #4CAF50; }
+        .product-card button:hover { background-color: #45a049; }
+        .logout-btn { background: #d32f2f; margin-top: 20px; }
+        .logout-btn:hover { background: #b71c1c; }
+    </style>
+</head>
+<body>
+
+<div class="navbar">Load & GCash Marketplace</div>
+
+<!-- SIGN UP PAGE -->
+<div class="form-container" id="signupPage">
+    <h2>Sign Up</h2>
+    <input type="text" id="signupUsername" placeholder="Username" required>
+    <input type="password" id="signupPassword" placeholder="Password" required>
+    <button onclick="signUp()">Create Account</button>
+    <p>Already have an account? <a href="#" onclick="showLogin()">Log in here</a></p>
+</div>
+
+<!-- LOGIN PAGE -->
+<div class="form-container hidden" id="loginPage">
+    <h2>Log In</h2>
+    <input type="text" id="loginUsername" placeholder="Username" required>
+    <input type="password" id="loginPassword" placeholder="Password" required>
+    <button onclick="logIn()">Log In</button>
+    <p>Don't have an account? <a href="#" onclick="showSignUp()">Sign up here</a></p>
+</div>
+
+<!-- MAIN PAGE -->
+<div class="container hidden" id="mainPage">
+    <h2>Available Services</h2>
+    <div class="products">
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200x150?text=Buy+Load" alt="Buy Load">
+            <h3>Buy Load</h3>
+            <p>Buy prepaid load for all networks from verified sellers.</p>
+            <button onclick="alert('Viewing Load Offers')">Browse</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200x150?text=Buy+Data" alt="Buy Data">
+            <h3>Buy Mobile Data</h3>
+            <p>Affordable MB/GB data offers from trusted users.</p>
+            <button onclick="alert('Viewing Data Offers')">Browse</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200x150?text=GCash+to+Load" alt="GCash to Load">
+            <h3>Trade GCash to Load</h3>
+            <p>Pay via GCash and receive prepaid load instantly.</p>
+            <button onclick="alert('Viewing GCash to Load Deals')">Trade</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://via.placeholder.com/200x150?text=Load+to+GCash" alt="Load to GCash">
+            <h3>Trade Load to GCash</h3>
+            <p>Sell your load and get GCash in return through offers.</p>
+            <button onclick="alert('Viewing Load to GCash Deals')">Trade</button>
+        </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">Log Out</button>
+</div>
+
+<script>
+function showLogin() {
+    document.getElementById("signupPage").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+}
+
+function showSignUp() {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("signupPage").classList.remove("hidden");
+}
+
+function signUp() {
+    var username = document.getElementById("signupUsername").value.trim();
+    var password = document.getElementById("signupPassword").value.trim();
+
+    if (username === "" || password === "") {
+        alert("Please complete the form.");
+        return;
+    }
+
+    var accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
+
+    // Check if user already exists
+    if (accounts.find(acc => acc.username === username)) {
+        alert("Username already exists. Please log in.");
+        return;
+    }
+
+    accounts.push({ username: username, password: password });
+    localStorage.setItem("accounts", JSON.stringify(accounts));
+
+    alert("Account created successfully! Please log in.");
+    showLogin();
+}
+
+function logIn() {
+    var username = document.getElementById("loginUsername").value.trim();
+    var password = document.getElementById("loginPassword").value.trim();
+
+    var accounts = JSON.parse(localStorage.getItem("accounts") || "[]");
+
+    var user = accounts.find(acc => acc.username === username && acc.password === password);
+
+    if (user) {
+        localStorage.setItem("loggedInUser", username);
+        showMainPage();
+    } else {
+        alert("Invalid username or password.");
+    }
+}
+
+function logout() {
+    localStorage.removeItem("loggedInUser");
+    location.reload();
+}
+
+function showMainPage() {
+    document.getElementById("signupPage").classList.add("hidden");
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("mainPage").classList.remove("hidden");
+}
+
+// Auto login if already logged in
+if (localStorage.getItem("loggedInUser")) {
+    showMainPage();
+}
+</script>
+
+</body>
+</html>
