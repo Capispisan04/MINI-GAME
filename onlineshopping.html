@@ -3,23 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Load & Trade Hub</title>
+    <title>Blue Marketplace</title>
     <style>
         body {
             margin: 0;
             font-family: 'Poppins', sans-serif;
-            background: #f0f8ff;
+            background-color: #f1f8ff;
+            color: #333;
         }
         header {
             background-color: #007bff;
             color: white;
             padding: 15px;
             text-align: center;
-            font-size: 1.5em;
+            font-size: 1.6em;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .container {
+            padding-top: 80px;
         }
         .form-container {
             max-width: 400px;
-            margin: 40px auto;
+            margin: 50px auto;
             padding: 20px;
             background: white;
             border-radius: 10px;
@@ -46,85 +54,166 @@
         button:hover {
             background: #0056b3;
         }
-        .section {
-            padding: 20px;
-            background: white;
-            margin: 10px;
-            border-radius: 10px;
+        .section-container {
             display: flex;
-            align-items: center;
-            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .section-card {
+            background-color: white;
+            margin: 10px;
+            width: 200px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
         }
         .section-icon {
-            font-size: 2em;
-            margin-right: 15px;
+            font-size: 3em;
+            color: #007bff;
+            margin-bottom: 10px;
         }
         .section-title {
             font-weight: bold;
+            font-size: 1.1em;
+        }
+        .sidebar {
+            width: 250px;
+            height: 100%;
+            background-color: #007bff;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            transition: 0.3s;
+            z-index: 999;
+        }
+        .sidebar a {
+            padding: 16px;
+            text-decoration: none;
             font-size: 1.2em;
-            color: #333;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background-color: #0056b3;
+        }
+        .open-sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2em;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .close-sidebar {
+            font-size: 2em;
+            color: white;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .content {
+            margin-left: 0;
+            padding: 20px;
         }
         nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #007bff;
+            padding: 10px;
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: #007bff;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
+            z-index: 100;
         }
         nav a {
             color: white;
             text-decoration: none;
-            font-size: 1em;
+            padding: 15px;
+            font-size: 1.2em;
         }
         .logout {
+            background-color: #dc3545;
             margin-top: 20px;
-            background: #dc3545;
         }
     </style>
 </head>
 <body>
 
-<header>Load & Trade Hub</header>
+<header>Blue Marketplace</header>
 
-<div id="auth-container" class="form-container">
-    <h2 id="auth-title">Sign Up</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="signup()">Sign Up</button>
-    <p style="text-align:center; margin-top:10px;">Already have an account? <a href="#" onclick="switchToLogin()">Login</a></p>
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+    <span class="close-sidebar" onclick="toggleSidebar()">&times;</span>
+    <a href="javascript:void(0);" onclick="showPage('home')">Home</a>
+    <a href="javascript:void(0);" onclick="showPage('shop')">Shop</a>
+    <a href="javascript:void(0);" onclick="showPage('profile')">Profile</a>
+    <a href="javascript:void(0);" onclick="logout()">Logout</a>
 </div>
 
-<div id="main-app" style="display:none; padding-bottom:60px;">
-    <div class="section" onclick="browse('load')">
-        <div class="section-icon">📱</div>
-        <div class="section-title">Buy Load</div>
+<!-- Open Sidebar Button -->
+<span class="open-sidebar" onclick="toggleSidebar()">&#9776;</span>
+
+<!-- Content -->
+<div class="container">
+    <div id="auth-container" class="form-container">
+        <h2 id="auth-title">Sign Up</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="signup()">Sign Up</button>
+        <p style="text-align:center; margin-top:10px;">Already have an account? <a href="javascript:void(0)" onclick="switchToLogin()">Login</a></p>
     </div>
-    <div class="section" onclick="browse('mb')">
-        <div class="section-icon">🌐</div>
-        <div class="section-title">Buy MB/GB Data</div>
+
+    <div id="main-app" style="display:none;">
+        <div class="section-container">
+            <div class="section-card" onclick="showPage('buy-load')">
+                <div class="section-icon">📱</div>
+                <div class="section-title">Buy Load</div>
+            </div>
+            <div class="section-card" onclick="showPage('buy-data')">
+                <div class="section-icon">🌐</div>
+                <div class="section-title">Buy Data</div>
+            </div>
+            <div class="section-card" onclick="showPage('trade-load-to-gcash')">
+                <div class="section-icon">🔄</div>
+                <div class="section-title">Trade Load to GCash</div>
+            </div>
+            <div class="section-card" onclick="showPage('trade-gcash-to-load')">
+                <div class="section-icon">💸</div>
+                <div class="section-title">Trade GCash to Load</div>
+            </div>
+        </div>
+        <button class="logout" onclick="logout()">Logout</button>
     </div>
-    <div class="section" onclick="browse('trade-load')">
-        <div class="section-icon">🔄</div>
-        <div class="section-title">Trade Load to GCash</div>
-    </div>
-    <div class="section" onclick="browse('trade-gcash')">
-        <div class="section-icon">💸</div>
-        <div class="section-title">Trade GCash to Load</div>
-    </div>
-    <button class="logout" onclick="logout()">Logout</button>
 </div>
 
 <nav>
-    <a href="#" onclick="goHome()">Home</a>
-    <a href="#" onclick="browse('shop')">Shop</a>
-    <a href="#" onclick="browse('profile')">Profile</a>
+    <a href="javascript:void(0)" onclick="showPage('home')">Home</a>
+    <a href="javascript:void(0)" onclick="showPage('shop')">Shop</a>
+    <a href="javascript:void(0)" onclick="showPage('profile')">Profile</a>
 </nav>
 
 <script>
-    if(localStorage.getItem('loggedIn') === 'true') {
-        showMain();
+    let currentPage = 'home';
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar.style.left === '-250px') {
+            sidebar.style.left = '0';
+        } else {
+            sidebar.style.left = '-250px';
+        }
     }
 
     function signup() {
@@ -167,15 +256,9 @@
         document.getElementById('main-app').style.display = 'block';
     }
 
-    function browse(section) {
-        alert("Opening: " + section.toUpperCase());
-        // Later you can replace this alert with real browsing page system
+    function showPage(page) {
+        currentPage = page;
+        alert("You are now viewing: " + page);  // You can replace with actual page content for real browsing
     }
 
-    function goHome() {
-        alert("You are at Home!");
-    }
-</script>
-
-</body>
-</html>
+    if(localStorage
