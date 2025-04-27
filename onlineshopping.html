@@ -258,7 +258,13 @@
 
     function showPage(page) {
         currentPage = page;
-        alert("You are now viewing: " + page);  // You can replace with actual page content for real browsing
+        alert("You are now viewing: " + page);  // You can replace this with actual page content for real browsing
     }
 
-    if(localStorage
+    if(localStorage.getItem('loggedIn') === 'true') {
+        showMain();
+    }
+</script>
+
+</body>
+</html>
