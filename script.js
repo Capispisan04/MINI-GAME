@@ -1,4 +1,4 @@
-// Function to toggle the sidebar visibility
+// Function to toggle sidebar visibility
 function toggleSidebar() {
     const sidebar = document.getElementById("sidebar");
     if (sidebar.style.left === "0px") {
@@ -8,73 +8,56 @@ function toggleSidebar() {
     }
 }
 
-// Function to show a specific page/content
+// Function to show specific pages in the app
 function showPage(pageId) {
-    const pages = document.querySelectorAll(".page-content");
+    const pages = document.querySelectorAll(".page-content, .form-container");
     pages.forEach((page) => {
         page.style.display = "none";
     });
+    
+    const pageToShow = document.getElementById(pageId);
+    if (pageToShow) {
+        pageToShow.style.display = "block";
+    }
 
-    const selectedPage = document.getElementById(pageId);
-    if (selectedPage) {
-        selectedPage.style.display = "block";
+    // Hide the authentication screen and show the main app if logged in
+    if (pageId === 'main-app') {
+        document.getElementById('auth-container').style.display = "none";
     }
 }
 
-// Function to go back to the main screen
+// Function for going back to the main app from a specific page
 function goBack() {
-    const pages = document.querySelectorAll(".page-content");
-    pages.forEach((page) => {
-        page.style.display = "none";
-    });
     showPage('main-app');
 }
 
-// Function to switch to login form
-function switchToLogin() {
-    const authContainer = document.getElementById("auth-container");
-    authContainer.innerHTML = `
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <p style="text-align:center; margin-top:10px;">Don't have an account? <a href="javascript:void(0)" onclick="switchToSignUp()">Sign Up</a></p>
-    `;
-}
-
-// Simulate Sign Up function
+// Function for signing up
 function signup() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
     if (username && password) {
-        alert("Sign Up successful!");
-        // Show main app after successful signup
-        document.getElementById("auth-container").style.display = "none";
-        document.getElementById("main-app").style.display = "block";
+        alert("Signed up successfully!");
+        showPage('main-app');
     } else {
-        alert("Please fill in all fields!");
+        alert("Please fill in both fields.");
     }
 }
 
-// Simulate Login function
-function login() {
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    if (username && password) {
-        alert("Login successful!");
-        // Show main app after successful login
-        document.getElementById("auth-container").style.display = "none";
-        document.getElementById("main-app").style.display = "block";
-    } else {
-        alert("Please fill in all fields!");
-    }
-}
-
-// Function to log out and return to the login/sign-up page
-function logout() {
+// Switch to the login form (for demo purpose, you can replace this with actual login functionality)
+function switchToLogin() {
+    document.getElementById("auth-title").textContent = "Login";
+    document.getElementById("signup-button").style.display = "none";
+    document.getElementById("login-button").style.display = "block";
     document.getElementById("auth-container").style.display = "block";
-    document.getElementById("main-app").style.display = "none";
-    alert("Logged out!");
 }
+
+// Function for logging out (for demo purpose, you can replace this with actual logout functionality)
+function logout() {
+    alert("Logged out successfully.");
+    showPage('auth-container');
+}
+
+// Ensure that when the page loads, the first page to display is the login/signup form
+document.addEventListener('DOMContentLoaded', function() {
+    showPage('auth-container');
+});
